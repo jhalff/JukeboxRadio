@@ -1,0 +1,11 @@
+name: RadioStations
+version: '${project.version}'
+main: me.chillm3r.radiostations.Main
+api-version: 1.18
+authors: [ Chillm3r ]
+description: Setup your own radio station and broadcast music to the entire server!
+website: https://github.com/jhalff
+commands:
+  radio:
+    description: Open radio menu
+    usage: /<command>
