@@ -87,13 +87,11 @@ public class RadioCreateCommand extends SubCommand {
         Main.loadData();
 
         try {
-            List<String> jukeboxData = new ArrayList<>();
+            Main.config.set(player.getDisplayName() + ".radio-location.x", String.valueOf(jukeboxLocation.getX()));
+            Main.config.set(player.getDisplayName() + ".radio-location.y", String.valueOf(jukeboxLocation.getY()));
+            Main.config.set(player.getDisplayName() + ".radio-location.z", String.valueOf(jukeboxLocation.getZ()));
+            Main.config.set(player.getDisplayName() + ".radio-power", "off");
 
-            jukeboxData.add(String.valueOf(jukeboxLocation.getX()));
-            jukeboxData.add(String.valueOf(jukeboxLocation.getY()));
-            jukeboxData.add(String.valueOf(jukeboxLocation.getZ()));
-
-            Main.config.set(player.getDisplayName(), jukeboxData);
             Main.config.save(Main.dataFile);
 
         } catch (Exception ex) {

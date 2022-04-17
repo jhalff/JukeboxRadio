@@ -13,11 +13,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.IOException;
+
 public class RadioMenuCommand extends SubCommand {
 
     private static Inventory menu;
-    private Boolean isMenuGenerated = false;
-    private static Boolean radioPower = false;
     private static ItemStack radioPowerItem = new ItemStack(Material.RED_WOOL);
     private static ItemMeta radioPowerMeta = radioPowerItem.getItemMeta();
 
@@ -38,42 +38,54 @@ public class RadioMenuCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!isMenuGenerated) {
+        Main.loadData();
+
+        if (Main.config.get(player.getDisplayName()) != null) {
             generateMenu(player);
-            sendNoRadioFoundMessage(player);
-
         } else {
-            Main.loadData();
-
-            if (Main.config.get(player.getDisplayName()) != null) {
-                InventoryClickListener.radioMenuActive = true;
-                player.openInventory(menu);
-            } else {
-                sendNoRadioFoundMessage(player);
-            }
+            sendNoRadioFoundMessage(player);
         }
     }
 
-    private void generateMenu(Player player) {
-        radioPowerMeta.setDisplayName("Power");
-        radioPowerItem.setItemMeta(radioPowerMeta);
+    private static void generateMenu(Player player) {
+        setRadioPower(player);
 
         menu = Bukkit.createInventory(null, 9, WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
         menu.setItem(4, radioPowerItem);
 
         InventoryClickListener.radioMenuActive = true;
-        isMenuGenerated = true;
+
+        player.openInventory(menu);
     }
 
     public static void toggleRadioPower(HumanEntity player) {
-        if (radioPower) {
-            radioPower = false;
-            radioPowerItem.setType(Material.RED_WOOL);
-            menu.setItem(4, radioPowerItem);
+        Main.loadData();
+        String radioPower = WordUtils.capitalizeFully(Main.config.getString(player.getName() + ".radio-power"));
+
+        if (radioPower.equalsIgnoreCase("on")) {
+            Main.config.set(player.getName() + ".radio-power", "off");
         } else {
-            radioPower = true;
+            Main.config.set(player.getName() + ".radio-power", "on");
+        }
+
+        try {
+            Main.config.save(Main.dataFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        generateMenu(Bukkit.getPlayer(player.getUniqueId()));
+    }
+
+    private static void setRadioPower(Player player) {
+        String radioPower = WordUtils.capitalizeFully(Main.config.getString(player.getDisplayName() + ".radio-power"));
+        radioPowerMeta.setDisplayName("Power");
+        radioPowerItem.setItemMeta(radioPowerMeta);
+
+        if (radioPower.equalsIgnoreCase("on")) {
             radioPowerItem.setType(Material.LIME_WOOL);
-            menu.setItem(4, radioPowerItem);
+        } else {
+            radioPowerItem.setType(Material.RED_WOOL);
         }
     }
 

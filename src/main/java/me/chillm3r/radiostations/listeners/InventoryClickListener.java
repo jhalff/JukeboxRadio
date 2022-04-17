@@ -14,13 +14,17 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         HumanEntity player = e.getWhoClicked();
 
+        // Toggle radio power
         if (radioMenuActive) {
             if (e.getClick().toString() == "LEFT" || e.getClick().toString() == "RIGHT") {
                 e.setCancelled(true);
-                String selectedItem = e.getCurrentItem().getItemMeta().getDisplayName();
 
-                if (selectedItem.equals("Power")) {
-                    RadioMenuCommand.toggleRadioPower(player);
+                if (e.getCurrentItem() != null) {
+                    String selectedItem = e.getCurrentItem().getType().name();
+
+                    if (selectedItem == "RED_WOOL" || selectedItem == "LIME_WOOL") {
+                        RadioMenuCommand.toggleRadioPower(player);
+                    }
                 }
             }
         }
