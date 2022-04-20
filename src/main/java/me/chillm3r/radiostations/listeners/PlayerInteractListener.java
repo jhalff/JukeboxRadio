@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 public class PlayerInteractListener implements Listener {
@@ -15,6 +17,11 @@ public class PlayerInteractListener implements Listener {
     Plugin plugin = Main.getPlugin(Main.class);
 
     public static Boolean selectRadioActive = false;
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        Main.loadData();
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -53,6 +60,18 @@ public class PlayerInteractListener implements Listener {
                     player.performCommand("radio menu");
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        Main.loadData();
+
+        try {
+            Main.config.set(e.getPlayer().getName() + ".radio-power", "off");
+            Main.config.save(Main.dataFile);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

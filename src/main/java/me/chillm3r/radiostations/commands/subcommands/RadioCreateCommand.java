@@ -7,8 +7,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -66,13 +64,8 @@ public class RadioCreateCommand extends SubCommand {
         player.sendMessage(ChatColor.GRAY + "Generating radio station...");
 
         Location jukeboxLocation = selectedBlock.getLocation();
-        Location barrelLocation = new Location(player.getWorld(), jukeboxLocation.getX(), jukeboxLocation.getY() + 1, jukeboxLocation.getZ());
-        Location fenceLocation = new Location(player.getWorld(), jukeboxLocation.getX(), jukeboxLocation.getY() + 2, jukeboxLocation.getZ());
-        Location ironBarLocation = new Location(player.getWorld(), jukeboxLocation.getX(), jukeboxLocation.getY() + 3, jukeboxLocation.getZ());
-
-        barrelLocation.getBlock().setType(Material.BARREL);
-        fenceLocation.getBlock().setType(Material.SPRUCE_FENCE);
-        ironBarLocation.getBlock().setType(Material.IRON_BARS);
+        Location chestLocation = new Location(player.getWorld(), jukeboxLocation.getX(), jukeboxLocation.getY() + 1, jukeboxLocation.getZ());
+        chestLocation.getBlock().setType(Material.CHEST);
 
         player.playSound(jukeboxLocation, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 3.0F, 0.5F);
 

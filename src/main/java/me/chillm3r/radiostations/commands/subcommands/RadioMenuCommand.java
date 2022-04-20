@@ -6,10 +6,13 @@ import me.chillm3r.radiostations.listeners.InventoryClickListener;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,7 +22,7 @@ public class RadioMenuCommand extends SubCommand {
 
     private static Inventory menu;
     private static ItemStack radioPowerItem = new ItemStack(Material.RED_WOOL);
-    private static ItemMeta radioPowerMeta = radioPowerItem.getItemMeta();
+    private static ItemMeta radioPowerMeta = radioPowerItem.getItemMeta();;
 
     @Override
     public String getName() {
@@ -62,10 +65,36 @@ public class RadioMenuCommand extends SubCommand {
         Main.loadData();
         String radioPower = WordUtils.capitalizeFully(Main.config.getString(player.getName() + ".radio-power"));
 
-        if (radioPower.equalsIgnoreCase("on")) {
-            Main.config.set(player.getName() + ".radio-power", "off");
+        if (radioPower.equalsIgnoreCase("off")) {
+            String dataX = (String) Main.config.get(player.getName() + ".radio-location.x");
+            String dataY = (String) Main.config.get(player.getName() + ".radio-location.y");
+            String dataZ = (String) Main.config.get(player.getName() + ".radio-location.z");
+
+            Location radioStorageLocation = new Location(player.getWorld(), Double.parseDouble(dataX), Double.parseDouble(dataY) + 1, Double.parseDouble(dataZ));
+            Chest radioStorage = (Chest) player.getWorld().getBlockAt(radioStorageLocation).getState();
+            InventoryHolder chest = (InventoryHolder)radioStorage;
+            Inventory chestInv = chest.getInventory();
+
+            if (chestInv != null) {
+                Boolean hasMusic = false;
+
+                for (ItemStack item : chestInv.getContents()) {
+                    if (item != null) {
+                        if (item.getType().name().contains("MUSIC_DISC")) {
+                            Main.config.set(player.getName() + ".radio-power", "on");
+                            hasMusic = true;
+                        }
+                    }
+                }
+
+                if (hasMusic == false) {
+                    Main.chatMessageHeader(Bukkit.getPlayer(player.getUniqueId()));
+                    player.sendMessage(ChatColor.RED + "No music!" + ChatColor.GRAY + " Please put" + ChatColor.WHITE + " music discs" + ChatColor.GRAY +  " in the chest");
+                    player.sendMessage("");
+                }
+            }
         } else {
-            Main.config.set(player.getName() + ".radio-power", "on");
+            Main.config.set(player.getName() + ".radio-power", "off");
         }
 
         try {

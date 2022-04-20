@@ -17,8 +17,6 @@ public class InventoryClickListener implements Listener {
         // Toggle radio power
         if (radioMenuActive) {
             if (e.getClick().toString() == "LEFT" || e.getClick().toString() == "RIGHT") {
-                e.setCancelled(true);
-
                 if (e.getCurrentItem() != null) {
                     String selectedItem = e.getCurrentItem().getType().name();
 
@@ -28,5 +26,7 @@ public class InventoryClickListener implements Listener {
                 }
             }
         }
+
+
     }
 }
