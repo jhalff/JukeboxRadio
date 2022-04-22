@@ -29,7 +29,7 @@ public class PlayerInteractListener implements Listener {
         String action = e.getAction().name();
         Block selectedBlock = e.getClickedBlock();
 
-        // Selecting jukebox on /radio create
+        // Selecting Jukebox
         if (selectRadioActive) {
             if (action == "RIGHT_CLICK_BLOCK") {
                 if (selectedBlock.getType().name() == "JUKEBOX") {
@@ -41,16 +41,16 @@ public class PlayerInteractListener implements Listener {
             }
         }
 
-        // Opening radio menu
+        // Opening Radio Menu
         if (action == "RIGHT_CLICK_BLOCK" && selectedBlock.getType().name() == "JUKEBOX") {
             Main.loadData();
 
-            Object dataObject = Main.config.get(player.getDisplayName());
+            Object dataObject = Main.config.get(player.getUniqueId().toString());
 
             if (dataObject != null) {
-                String dataX = (String) Main.config.get(player.getDisplayName() + ".radio-location.x");
-                String dataY = (String) Main.config.get(player.getDisplayName() + ".radio-location.y");
-                String dataZ = (String) Main.config.get(player.getDisplayName() + ".radio-location.z");
+                String dataX = (String) Main.config.get(player.getUniqueId() + ".radio-location.x");
+                String dataY = (String) Main.config.get(player.getUniqueId() + ".radio-location.y");
+                String dataZ = (String) Main.config.get(player.getUniqueId() + ".radio-location.z");
 
                 String targetX = String.valueOf(selectedBlock.getLocation().getX());
                 String targetY = String.valueOf(selectedBlock.getLocation().getY());
@@ -68,8 +68,10 @@ public class PlayerInteractListener implements Listener {
         Main.loadData();
 
         try {
-            Main.config.set(e.getPlayer().getName() + ".radio-power", "off");
-            Main.config.save(Main.dataFile);
+            if (Main.config.getString(e.getPlayer().getUniqueId().toString()) != null) {
+                Main.config.set(e.getPlayer().getUniqueId() + ".radio-power", "off");
+                Main.config.save(Main.dataFile);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

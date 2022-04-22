@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,7 +38,7 @@ public class RadioCreateCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         Main.loadData();
 
-        if (Main.config.get(player.getDisplayName()) == null) {
+        if (Main.config.get(player.getUniqueId().toString()) == null) {
             PlayerInteractListener.selectRadioActive = true;
             sendSelectRadioMessage(player);
         } else {
@@ -54,7 +55,7 @@ public class RadioCreateCommand extends SubCommand {
         };
 
         Timer timer = new Timer("Timer");
-        long delay = 5000L;
+        long delay = 8000L;
 
         timer.schedule(stopRadioSelection, delay);
     }
@@ -75,11 +76,12 @@ public class RadioCreateCommand extends SubCommand {
         Main.loadData();
 
         try {
-            Main.config.set(player.getDisplayName() + ".radio-location.x", String.valueOf(jukeboxLocation.getX()));
-            Main.config.set(player.getDisplayName() + ".radio-location.y", String.valueOf(jukeboxLocation.getY()));
-            Main.config.set(player.getDisplayName() + ".radio-location.z", String.valueOf(jukeboxLocation.getZ()));
-            Main.config.set(player.getDisplayName() + ".radio-power", "off");
-            Main.config.set(player.getDisplayName() + ".radio-settings.name", WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
+            Main.config.set(player.getUniqueId() + ".radio-location.x", String.valueOf(jukeboxLocation.getX()));
+            Main.config.set(player.getUniqueId() + ".radio-location.y", String.valueOf(jukeboxLocation.getY()));
+            Main.config.set(player.getUniqueId() + ".radio-location.z", String.valueOf(jukeboxLocation.getZ()));
+            Main.config.set(player.getUniqueId() + ".radio-power", "off");
+            Main.config.set(player.getUniqueId() + ".radio-settings.name", WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
+            Main.config.set(player.getUniqueId() + ".radio-listeners", new ArrayList<>());
 
             Main.config.save(Main.dataFile);
 

@@ -57,9 +57,9 @@ public final class Main extends JavaPlugin {
     public static Inventory getRadioInventory(Player player) {
         Main.loadData();
 
-        String dataX = (String) Main.config.get(player.getName() + ".radio-location.x");
-        String dataY = (String) Main.config.get(player.getName() + ".radio-location.y");
-        String dataZ = (String) Main.config.get(player.getName() + ".radio-location.z");
+        String dataX = (String) Main.config.get(player.getUniqueId() + ".radio-location.x");
+        String dataY = (String) Main.config.get(player.getUniqueId() + ".radio-location.y");
+        String dataZ = (String) Main.config.get(player.getUniqueId() + ".radio-location.z");
 
         Location radioStorageLocation = new Location(player.getWorld(), Double.parseDouble(dataX), Double.parseDouble(dataY) + 1, Double.parseDouble(dataZ));
         Chest radioStorage = (Chest) player.getWorld().getBlockAt(radioStorageLocation).getState();

@@ -4,7 +4,7 @@ import me.chillm3r.radiostations.Main;
 import me.chillm3r.radiostations.commands.subcommands.RadioCreateCommand;
 import me.chillm3r.radiostations.commands.subcommands.RadioMenuCommand;
 import me.chillm3r.radiostations.commands.subcommands.RadioSettingsCommand;
-import me.chillm3r.radiostations.commands.subcommands.RadioStatsCommand;
+import me.chillm3r.radiostations.commands.subcommands.RadioListCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +24,7 @@ public class CommandManager implements CommandExecutor {
         subCommands.add(new RadioCreateCommand());
         subCommands.add(new RadioMenuCommand());
         subCommands.add(new RadioSettingsCommand());
-        subCommands.add(new RadioStatsCommand());
+        subCommands.add(new RadioListCommand());
     }
 
     @Override
@@ -41,12 +41,7 @@ public class CommandManager implements CommandExecutor {
                 }
             } else {
                 Main.loadData();
-
-                if (Main.config.get(player.getDisplayName()) != null) {
-                    player.performCommand("radio menu");
-                } else {
-                    sendHelpMessage(player);
-                }
+                player.performCommand("radio menu");
             }
         }
 

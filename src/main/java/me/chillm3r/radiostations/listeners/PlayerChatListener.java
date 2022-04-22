@@ -24,7 +24,7 @@ public class PlayerChatListener implements Listener {
             String radioName = WordUtils.capitalizeFully(msg);
 
             try {
-                Main.config.set(player.getName() + ".radio-settings.name", radioName);
+                Main.config.set(player.getUniqueId() + ".radio-settings.name", radioName);
                 Main.config.save(Main.dataFile);
 
                 radioNameChangeActive = false;

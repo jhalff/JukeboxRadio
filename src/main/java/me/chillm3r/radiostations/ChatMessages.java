@@ -19,6 +19,7 @@ public class ChatMessages {
         player.sendMessage("");
     }
     public static void sendNoRadioSelectedMessage(Player player) {
+        player.sendMessage("");
         player.sendMessage(ChatColor.RED + "No jukebox selected in time" + ChatColor.GRAY + " Try again by executing:");
         player.sendMessage(ChatColor.WHITE + "/radio create");
         player.sendMessage("");
@@ -56,11 +57,21 @@ public class ChatMessages {
         player.sendMessage("");
     }
     public static void sendNoRadioNameProvidedMessage(Player player) {
+        player.sendMessage("");
         player.sendMessage(ChatColor.RED + "No name provided!" + ChatColor.GRAY + " Cancelling radio name change...");
         player.sendMessage("");
     }
     public static void sendRadioNameChangedMessage(Player player, String radioName) {
+        player.sendMessage("");
         player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.GRAY + " New radio name is: " + ChatColor.WHITE + radioName);
+        player.sendMessage("");
+    }
+
+
+    // Radio List
+    public static void sendTunedInMessage(Player player, String radioName) {
+        chatMessageHeader(player);
+        player.sendMessage(ChatColor.GRAY + "Now listening to: " + ChatColor.WHITE + radioName);
         player.sendMessage("");
     }
 }

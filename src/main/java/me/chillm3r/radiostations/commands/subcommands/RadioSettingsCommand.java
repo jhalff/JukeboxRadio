@@ -41,7 +41,7 @@ public class RadioSettingsCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         Main.loadData();
 
-        if (Main.config.get(player.getDisplayName()) != null) {
+        if (Main.config.get(player.getUniqueId().toString()) != null) {
             generateMenu(player);
         } else {
             sendNoRadioFoundMessage(player);
@@ -51,12 +51,12 @@ public class RadioSettingsCommand extends SubCommand {
     private void generateMenu(Player player) {
         Main.loadData();
 
-        menu = Bukkit.createInventory(null, 9, Main.config.getString(player.getDisplayName() + ".radio-settings.name") + " — Settings");
+        menu = Bukkit.createInventory(null, 9, Main.config.getString(player.getUniqueId() + ".radio-settings.name") + " — Settings");
         menu.setItem(2, settingNameItem);
         settingNameMeta.setDisplayName("Change station name");
         settingNameItem.setItemMeta(settingNameMeta);
 
-        InventoryClickListener.radioMenuSettingsActive = true;
+        InventoryClickListener.radioMenuActive = true;
         player.openInventory(menu);
     }
 
@@ -67,10 +67,10 @@ public class RadioSettingsCommand extends SubCommand {
 
         TimerTask stopRadioNameChange = new TimerTask() {
             public void run() {
-                if (PlayerChatListener.radioNameChangeActive) {
-                    sendNoRadioNameProvidedMessage(player);
-                    PlayerChatListener.radioNameChangeActive = false;
-                }
+            if (PlayerChatListener.radioNameChangeActive) {
+                sendNoRadioNameProvidedMessage(player);
+                PlayerChatListener.radioNameChangeActive = false;
+            }
             }
         };
 
