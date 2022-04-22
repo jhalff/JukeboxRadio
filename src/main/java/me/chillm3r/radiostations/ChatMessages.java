@@ -12,7 +12,7 @@ public class ChatMessages {
     }
 
 
-    // Radio create
+    // Radio Create
     public static void sendSelectRadioMessage(Player player) {
         chatMessageHeader(player);
         player.sendMessage(ChatColor.GRAY + "Please" + ChatColor.WHITE + " RIGHT-CLICK" + ChatColor.GRAY + " on a" + ChatColor.BOLD + " jukebox");
@@ -35,7 +35,7 @@ public class ChatMessages {
     }
 
 
-    // Radio menu
+    // Radio Menu
     public static void sendNoRadioFoundMessage(Player player) {
         chatMessageHeader(player);
         player.sendMessage(ChatColor.RED + "No radio found!" + ChatColor.GRAY + " Create your radio by executing:");
@@ -45,6 +45,22 @@ public class ChatMessages {
     public static void sendNoMusicFoundMessage(Player player) {
         chatMessageHeader(player);
         player.sendMessage(ChatColor.RED + "No music!" + ChatColor.GRAY + " Please put" + ChatColor.WHITE + " music discs" + ChatColor.GRAY +  " in the chest");
+        player.sendMessage("");
+    }
+
+
+    // Radio Settings
+    public static void sendChangeRadioNameMessage(Player player) {
+        chatMessageHeader(player);
+        player.sendMessage(ChatColor.GRAY + "Please provide a new radio name in chat");
+        player.sendMessage("");
+    }
+    public static void sendNoRadioNameProvidedMessage(Player player) {
+        player.sendMessage(ChatColor.RED + "No name provided!" + ChatColor.GRAY + " Cancelling radio name change...");
+        player.sendMessage("");
+    }
+    public static void sendRadioNameChangedMessage(Player player, String radioName) {
+        player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.GRAY + " New radio name is: " + ChatColor.WHITE + radioName);
         player.sendMessage("");
     }
 }

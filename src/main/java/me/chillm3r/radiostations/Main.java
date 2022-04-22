@@ -2,9 +2,9 @@ package me.chillm3r.radiostations;
 
 import me.chillm3r.radiostations.commands.CommandManager;
 import me.chillm3r.radiostations.listeners.InventoryClickListener;
+import me.chillm3r.radiostations.listeners.PlayerChatListener;
 import me.chillm3r.radiostations.listeners.PlayerInteractListener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,6 +27,7 @@ public final class Main extends JavaPlugin {
 
         getCommand("radio").setExecutor(new CommandManager());
 
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
 

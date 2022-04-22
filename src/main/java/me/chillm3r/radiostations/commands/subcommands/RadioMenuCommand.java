@@ -93,23 +93,19 @@ public class RadioMenuCommand extends SubCommand {
 
     // Menu generation
     private static void generateMenu(Player player) {
-        menu = Bukkit.createInventory(null, 9, WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
+        menu = Bukkit.createInventory(null, 9, Main.config.getString(player.getDisplayName() + ".radio-settings.name"));
         menu.setItem(2, radioSettingsItem);
         menu.setItem(4, radioPowerItem);
         menu.setItem(6, radioStatsItem);
 
-        setRadioSettings(player);
-        setRadioPower(player);
-        setRadioStats(player);
-
-        InventoryClickListener.radioMenuActive = true;
-
-        player.openInventory(menu);
-    }
-
-    private static void setRadioSettings(Player player) {
         radioSettingsMeta.setDisplayName("Settings");
         radioSettingsItem.setItemMeta(radioSettingsMeta);
+        setRadioPower(player);
+        radioStatsMeta.setDisplayName("Statistics");
+        radioStatsItem.setItemMeta(radioStatsMeta);
+
+        InventoryClickListener.radioMenuActive = true;
+        player.openInventory(menu);
     }
 
     private static void setRadioPower(Player player) {
@@ -122,10 +118,5 @@ public class RadioMenuCommand extends SubCommand {
         } else {
             radioPowerItem.setType(Material.RED_WOOL);
         }
-    }
-
-    private static void setRadioStats(Player player) {
-        radioStatsMeta.setDisplayName("Statistics");
-        radioStatsItem.setItemMeta(radioStatsMeta);
     }
 }

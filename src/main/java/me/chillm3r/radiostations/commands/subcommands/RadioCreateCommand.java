@@ -3,7 +3,11 @@ package me.chillm3r.radiostations.commands.subcommands;
 import me.chillm3r.radiostations.Main;
 import me.chillm3r.radiostations.commands.SubCommand;
 import me.chillm3r.radiostations.listeners.PlayerInteractListener;
-import org.bukkit.*;
+import org.apache.commons.lang.WordUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -75,6 +79,7 @@ public class RadioCreateCommand extends SubCommand {
             Main.config.set(player.getDisplayName() + ".radio-location.y", String.valueOf(jukeboxLocation.getY()));
             Main.config.set(player.getDisplayName() + ".radio-location.z", String.valueOf(jukeboxLocation.getZ()));
             Main.config.set(player.getDisplayName() + ".radio-power", "off");
+            Main.config.set(player.getDisplayName() + ".radio-settings.name", WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
 
             Main.config.save(Main.dataFile);
 
