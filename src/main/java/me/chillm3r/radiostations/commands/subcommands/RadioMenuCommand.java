@@ -5,24 +5,27 @@ import me.chillm3r.radiostations.commands.SubCommand;
 import me.chillm3r.radiostations.listeners.InventoryClickListener;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.IOException;
 
+import static me.chillm3r.radiostations.ChatMessages.sendNoMusicFoundMessage;
+import static me.chillm3r.radiostations.ChatMessages.sendNoRadioFoundMessage;
+
 public class RadioMenuCommand extends SubCommand {
 
     private static Inventory menu;
+    private static ItemStack radioSettingsItem = new ItemStack(Material.BOOK);
     private static ItemStack radioPowerItem = new ItemStack(Material.RED_WOOL);
-    private static ItemMeta radioPowerMeta = radioPowerItem.getItemMeta();;
+    private static ItemStack radioStatsItem = new ItemStack(Material.PAPER);
+    private static ItemMeta radioSettingsMeta = radioSettingsItem.getItemMeta();
+    private static ItemMeta radioPowerMeta = radioPowerItem.getItemMeta();
+    private static ItemMeta radioStatsMeta = radioStatsItem.getItemMeta();
 
     @Override
     public String getName() {
@@ -50,35 +53,17 @@ public class RadioMenuCommand extends SubCommand {
         }
     }
 
-    private static void generateMenu(Player player) {
-        setRadioPower(player);
-
-        menu = Bukkit.createInventory(null, 9, WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
-        menu.setItem(4, radioPowerItem);
-
-        InventoryClickListener.radioMenuActive = true;
-
-        player.openInventory(menu);
-    }
-
     public static void toggleRadioPower(HumanEntity player) {
         Main.loadData();
         String radioPower = WordUtils.capitalizeFully(Main.config.getString(player.getName() + ".radio-power"));
 
         if (radioPower.equalsIgnoreCase("off")) {
-            String dataX = (String) Main.config.get(player.getName() + ".radio-location.x");
-            String dataY = (String) Main.config.get(player.getName() + ".radio-location.y");
-            String dataZ = (String) Main.config.get(player.getName() + ".radio-location.z");
+            Inventory radioInv = Main.getRadioInventory((Player) player);
 
-            Location radioStorageLocation = new Location(player.getWorld(), Double.parseDouble(dataX), Double.parseDouble(dataY) + 1, Double.parseDouble(dataZ));
-            Chest radioStorage = (Chest) player.getWorld().getBlockAt(radioStorageLocation).getState();
-            InventoryHolder chest = (InventoryHolder)radioStorage;
-            Inventory chestInv = chest.getInventory();
-
-            if (chestInv != null) {
+            if (radioInv != null) {
                 Boolean hasMusic = false;
 
-                for (ItemStack item : chestInv.getContents()) {
+                for (ItemStack item : radioInv.getContents()) {
                     if (item != null) {
                         if (item.getType().name().contains("MUSIC_DISC")) {
                             Main.config.set(player.getName() + ".radio-power", "on");
@@ -88,9 +73,7 @@ public class RadioMenuCommand extends SubCommand {
                 }
 
                 if (hasMusic == false) {
-                    Main.chatMessageHeader(Bukkit.getPlayer(player.getUniqueId()));
-                    player.sendMessage(ChatColor.RED + "No music!" + ChatColor.GRAY + " Please put" + ChatColor.WHITE + " music discs" + ChatColor.GRAY +  " in the chest");
-                    player.sendMessage("");
+                    sendNoMusicFoundMessage((Player) player);
                 }
             }
         } else {
@@ -106,6 +89,29 @@ public class RadioMenuCommand extends SubCommand {
         generateMenu(Bukkit.getPlayer(player.getUniqueId()));
     }
 
+
+
+    // Menu generation
+    private static void generateMenu(Player player) {
+        menu = Bukkit.createInventory(null, 9, WordUtils.capitalizeFully(player.getDisplayName()) + "'s Radio");
+        menu.setItem(2, radioSettingsItem);
+        menu.setItem(4, radioPowerItem);
+        menu.setItem(6, radioStatsItem);
+
+        setRadioSettings(player);
+        setRadioPower(player);
+        setRadioStats(player);
+
+        InventoryClickListener.radioMenuActive = true;
+
+        player.openInventory(menu);
+    }
+
+    private static void setRadioSettings(Player player) {
+        radioSettingsMeta.setDisplayName("Settings");
+        radioSettingsItem.setItemMeta(radioSettingsMeta);
+    }
+
     private static void setRadioPower(Player player) {
         String radioPower = WordUtils.capitalizeFully(Main.config.getString(player.getDisplayName() + ".radio-power"));
         radioPowerMeta.setDisplayName("Power");
@@ -118,10 +124,8 @@ public class RadioMenuCommand extends SubCommand {
         }
     }
 
-    private void sendNoRadioFoundMessage(Player player) {
-        Main.chatMessageHeader(player);
-        player.sendMessage(ChatColor.RED + "No radio found!" + ChatColor.GRAY + " Create your radio by executing:");
-        player.sendMessage(ChatColor.WHITE + "/radio create");
-        player.sendMessage("");
+    private static void setRadioStats(Player player) {
+        radioStatsMeta.setDisplayName("Statistics");
+        radioStatsItem.setItemMeta(radioStatsMeta);
     }
 }

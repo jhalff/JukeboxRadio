@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static me.chillm3r.radiostations.ChatMessages.*;
+
 public class RadioCreateCommand extends SubCommand {
 
     @Override
@@ -33,22 +35,15 @@ public class RadioCreateCommand extends SubCommand {
 
         if (Main.config.get(player.getDisplayName()) == null) {
             PlayerInteractListener.selectRadioActive = true;
-
-            Main.chatMessageHeader(player);
-            player.sendMessage(ChatColor.GRAY + "Please" + ChatColor.WHITE + " RIGHT-CLICK" + ChatColor.GRAY + " on a" + ChatColor.BOLD + " jukebox");
-            player.sendMessage("");
+            sendSelectRadioMessage(player);
         } else {
-            Main.chatMessageHeader(player);
-            player.sendMessage(ChatColor.RED + "Whoops.." + ChatColor.GRAY + " You can only have 1 radio station.");
-            player.sendMessage("");
+            sendMultipleRadioMessage(player);
         }
 
         TimerTask stopRadioSelection = new TimerTask() {
             public void run() {
                 if (PlayerInteractListener.selectRadioActive) {
-                    player.sendMessage(ChatColor.RED + "No jukebox selected in time" + ChatColor.GRAY + " Try again by executing:");
-                    player.sendMessage(ChatColor.WHITE + "/radio create");
-                    player.sendMessage("");
+                    sendNoRadioSelectedMessage(player);
                     PlayerInteractListener.selectRadioActive = false;
                 }
             }
@@ -68,11 +63,7 @@ public class RadioCreateCommand extends SubCommand {
         chestLocation.getBlock().setType(Material.CHEST);
 
         player.playSound(jukeboxLocation, Sound.BLOCK_AMETHYST_BLOCK_BREAK, 3.0F, 0.5F);
-
-        player.sendMessage("");
-        player.sendMessage(ChatColor.GREEN + "Success!" + ChatColor.GRAY + " Radio station is up and running!");
-        player.sendMessage("");
-
+        sendRadioCreatedMessage(player);
         saveRadioData(player, jukeboxLocation);
     }
 
